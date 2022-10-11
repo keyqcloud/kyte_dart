@@ -1,11 +1,13 @@
 library kyte_dart;
 
 import 'dart:convert';
-import 'dart:developer';
+// import 'dart:developer';
 
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+
+import 'kyte_error_response.dart';
 
 enum KyteRequestType { post, put, get, delete }
 
@@ -94,7 +96,8 @@ class Kyte {
     }
   }
 
-  Future<dynamic> request(KyteRequestType method, String model,
+  Future<dynamic> request(dynamic Function(Map<String, dynamic> json) fromJosn,
+      KyteRequestType method, String model,
       {String? body,
       String? field,
       String? value,
@@ -159,7 +162,16 @@ class Kyte {
         throw Exception(
             'Unknown or unsupported HTTP request. Must be POST, PUT, GET, or DELETE');
     }
-    return response;
+
+    try {
+      if (response.statusCode != 200) {
+        return KyteErrorResponse.fromJson(json.decode(response.body));
+      }
+
+      return fromJosn(json.decode(response.body));
+    } catch (e) {
+      throw Exception("Unable to parse response data. ${e.toString()}");
+    }
   }
 
   /*
@@ -170,15 +182,21 @@ class Kyte {
       String pageId = "1",
       String pageSize = "0",
       String contentType = "application/json"}) async {
-    http.Response response = await client.post(
-      generateEndpointUrl(model),
-      headers: generateHeader(
-          customHeaders: customHeaders,
-          pageId: pageId,
-          pageSize: pageSize,
-          contentType: contentType),
-      body: body,
-    );
+    http.Response response;
+
+    try {
+      response = await client.post(
+        generateEndpointUrl(model),
+        headers: generateHeader(
+            customHeaders: customHeaders,
+            pageId: pageId,
+            pageSize: pageSize,
+            contentType: contentType),
+        body: body,
+      );
+    } catch (e) {
+      throw Exception("Unable to make POST request. ${e.toString()}");
+    }
 
     return response;
   }
@@ -193,14 +211,20 @@ class Kyte {
       String pageId = "1",
       String pageSize = "0",
       String contentType = "application/json"}) async {
-    http.Response response = await client.get(
-      generateEndpointUrl(model, field: field, value: value),
-      headers: generateHeader(
-          customHeaders: customHeaders,
-          pageId: pageId,
-          pageSize: pageSize,
-          contentType: contentType),
-    );
+    http.Response response;
+
+    try {
+      response = await client.get(
+        generateEndpointUrl(model, field: field, value: value),
+        headers: generateHeader(
+            customHeaders: customHeaders,
+            pageId: pageId,
+            pageSize: pageSize,
+            contentType: contentType),
+      );
+    } catch (e) {
+      throw Exception("Unable to make GET request. ${e.toString()}");
+    }
 
     return response;
   }
@@ -213,15 +237,21 @@ class Kyte {
       String pageId = "1",
       String pageSize = "0",
       String contentType = "application/json"}) async {
-    http.Response response = await client.put(
-      generateEndpointUrl(model, field: field, value: value),
-      headers: generateHeader(
-          customHeaders: customHeaders,
-          pageId: pageId,
-          pageSize: pageSize,
-          contentType: contentType),
-      body: body,
-    );
+    http.Response response;
+
+    try {
+      response = await client.put(
+        generateEndpointUrl(model, field: field, value: value),
+        headers: generateHeader(
+            customHeaders: customHeaders,
+            pageId: pageId,
+            pageSize: pageSize,
+            contentType: contentType),
+        body: body,
+      );
+    } catch (e) {
+      throw Exception("Unable to make PUT request. ${e.toString()}");
+    }
 
     return response;
   }
@@ -236,14 +266,20 @@ class Kyte {
       String pageId = "1",
       String pageSize = "0",
       String contentType = "application/json"}) async {
-    http.Response response = await client.delete(
-      generateEndpointUrl(model, field: field, value: value),
-      headers: generateHeader(
-          customHeaders: customHeaders,
-          pageId: pageId,
-          pageSize: pageSize,
-          contentType: contentType),
-    );
+    http.Response response;
+
+    try {
+      response = await client.delete(
+        generateEndpointUrl(model, field: field, value: value),
+        headers: generateHeader(
+            customHeaders: customHeaders,
+            pageId: pageId,
+            pageSize: pageSize,
+            contentType: contentType),
+      );
+    } catch (e) {
+      throw Exception("Unable to make DELETE request. ${e.toString()}");
+    }
 
     return response;
   }
