@@ -15,8 +15,8 @@ class Kyte {
   String? publicKey;
   String? secretKey;
 
-  String sessionToken = "0";
-  String txToken = "0";
+  String _sessionToken = "0";
+  String _txToken = "0";
 
   final String _endpoint = const String.fromEnvironment('kyte_endpoint');
   final String _identifier = const String.fromEnvironment('kyte_identifier');
@@ -47,16 +47,43 @@ class Kyte {
         publicKey ?? _publicKey,
         secretKey ?? _secretKey);
 
-    api.sessionToken = sessionToken;
-    api.txToken = txToken;
+    api.sessionToken = _sessionToken;
+    api.txToken = _txToken;
 
-    return await api.request(fromJosn, method, model,
-        body: body,
-        field: field,
-        value: value,
-        customHeaders: customHeaders,
-        pageId: pageId,
-        pageSize: pageSize,
-        contentType: contentType);
+    dynamic response;
+
+    try {
+      response = await api.request(fromJosn, method, model,
+          body: body,
+          field: field,
+          value: value,
+          customHeaders: customHeaders,
+          pageId: pageId,
+          pageSize: pageSize,
+          contentType: contentType);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+
+    // retrieve session and tx token and internal update variables
+    final dynamic modelResponse = response;
+    _sessionToken = (modelResponse as ModelResponse).sessionToken ?? "0";
+    _txToken = modelResponse.txToken ?? "0";
+
+    // check response code
+    if (modelResponse.responseCode == 400) {
+      throw Exception((modelResponse as KyteErrorResponse).message ??
+          "Unknown error response from API");
+    }
+    if (modelResponse.responseCode == 403) {
+      throw Exception((modelResponse as KyteErrorResponse).message ??
+          "Unauthorized Access");
+    }
+    if (modelResponse.responseCode != 200) {
+      throw Exception((modelResponse as KyteErrorResponse).message ??
+          "Unknown error response from API. Error code ${modelResponse.responseCode}.");
+    }
+
+    return response;
   }
 }
