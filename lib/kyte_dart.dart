@@ -27,7 +27,7 @@ class Kyte {
       String? value,
       Map<String, String>? customHeaders,
       String pageId = "1",
-      String pageSize = "0",
+      String pageSize = "50",
       String contentType = "application/json"}) async {
     await dotenv.load(fileName: ".env");
     final String kyte_endpoint = dotenv.env['kyte_endpoint'] ?? "";
