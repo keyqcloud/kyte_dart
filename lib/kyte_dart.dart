@@ -1,5 +1,6 @@
 library kyte_dart;
 
+import 'package:dotenv/dotenv.dart';
 import 'package:kyte_dart/model_response.dart';
 
 import 'api.dart';
@@ -7,24 +8,8 @@ import 'kyte_error_response.dart';
 
 class Kyte {
   static final Kyte _instance = Kyte._internal();
-  // final Api api;
-
-  String? endpoint;
-  String? identifier;
-  String? accountNumber;
-  String? publicKey;
-  String? secretKey;
-  String? appId;
-
   String _sessionToken = "0";
   String _txToken = "0";
-
-  final String _endpoint = const String.fromEnvironment('kyte_endpoint');
-  final String _identifier = const String.fromEnvironment('kyte_identifier');
-  final String _accountNumber = const String.fromEnvironment('kyte_account');
-  final String _publicKey = const String.fromEnvironment('kyte_publickey');
-  final String _secretKey = const String.fromEnvironment('kyte_secretkey');
-  final String _appId = const String.fromEnvironment('kyte_appid');
 
   factory Kyte() {
     return _instance;
@@ -42,13 +27,37 @@ class Kyte {
       String pageId = "1",
       String pageSize = "0",
       String contentType = "application/json"}) async {
-    Api api = Api(
-        endpoint ?? _endpoint,
-        identifier ?? _identifier,
-        accountNumber ?? _accountNumber,
-        publicKey ?? _publicKey,
-        secretKey ?? _secretKey,
-        appId ?? _appId);
+    var env = DotEnv(includePlatformEnvironment: true)..load();
+    final String kyte_endpoint = env['kyte_endpoint'] ?? "";
+    final String kyte_identifier = env['kyte_identifier'] ?? "";
+    final String kyte_account = env['kyte_account'] ?? "";
+    final String kyte_publickey = env['kyte_publickey'] ?? "";
+    final String kyte_secretkey = env['kyte_secretkey'] ?? "";
+    final String kyte_appid = env['kyte_appid'] ?? "";
+
+    if (kyte_endpoint.isEmpty) {
+      throw Exception(
+          "Kyte endpoint cannot be empyt. Please define kyte_endpoint in your .env file.");
+    }
+    if (kyte_identifier.isEmpty) {
+      throw Exception(
+          "Kyte identifier cannot be empyt. Please define kyte_identifier in your .env file.");
+    }
+    if (kyte_account.isEmpty) {
+      throw Exception(
+          "Kyte account number cannot be empyt. Please define kyte_account in your .env file.");
+    }
+    if (kyte_publickey.isEmpty) {
+      throw Exception(
+          "Kyte public key cannot be empyt. Please define kyte_publickey in your .env file.");
+    }
+    if (kyte_secretkey.isEmpty) {
+      throw Exception(
+          "Kyte secret key cannot be empyt. Please define kyte_secretkey in your .env file.");
+    }
+
+    Api api = Api(kyte_endpoint, kyte_identifier, kyte_account, kyte_publickey,
+        kyte_secretkey, kyte_appid);
 
     api.sessionToken = _sessionToken;
     api.txToken = _txToken;
