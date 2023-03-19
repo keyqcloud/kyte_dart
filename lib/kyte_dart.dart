@@ -1,6 +1,8 @@
 library kyte_dart;
 
-import 'package:dotenv/dotenv.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:kyte_dart/http_exception.dart';
 import 'package:kyte_dart/model_response.dart';
 
 import 'api.dart';
@@ -8,8 +10,8 @@ import 'kyte_error_response.dart';
 
 class Kyte {
   static final Kyte _instance = Kyte._internal();
-  String _sessionToken = "0";
-  String _txToken = "0";
+  String _sessionToken = GetStorage().read('kyteSessionToken') ?? "0";
+  String _txToken = GetStorage().read('kyteTxToken') ?? "0";
 
   factory Kyte() {
     return _instance;
@@ -27,13 +29,13 @@ class Kyte {
       String pageId = "1",
       String pageSize = "0",
       String contentType = "application/json"}) async {
-    var env = DotEnv(includePlatformEnvironment: true)..load();
-    final String kyte_endpoint = env['kyte_endpoint'] ?? "";
-    final String kyte_identifier = env['kyte_identifier'] ?? "";
-    final String kyte_account = env['kyte_account'] ?? "";
-    final String kyte_publickey = env['kyte_publickey'] ?? "";
-    final String kyte_secretkey = env['kyte_secretkey'] ?? "";
-    final String kyte_appid = env['kyte_appid'] ?? "";
+    await dotenv.load(fileName: ".env");
+    final String kyte_endpoint = dotenv.env['kyte_endpoint'] ?? "";
+    final String kyte_identifier = dotenv.env['kyte_identifier'] ?? "";
+    final String kyte_account = dotenv.env['kyte_account'] ?? "";
+    final String kyte_publickey = dotenv.env['kyte_publickey'] ?? "";
+    final String kyte_secretkey = dotenv.env['kyte_secretkey'] ?? "";
+    final String kyte_appid = dotenv.env['kyte_appid'] ?? "";
 
     if (kyte_endpoint.isEmpty) {
       throw Exception(
@@ -74,7 +76,7 @@ class Kyte {
           pageSize: pageSize,
           contentType: contentType);
     } catch (e) {
-      throw Exception(e.toString());
+      throw e;
     }
 
     // retrieve session and tx token and internal update variables
@@ -82,18 +84,26 @@ class Kyte {
     _sessionToken = (modelResponse as ModelResponse).sessionToken ?? "0";
     _txToken = modelResponse.txToken ?? "0";
 
+    GetStorage().write('kyteSessionToken', _sessionToken);
+    GetStorage().write('kyteTxToken', _txToken);
+
     // check response code
     if (modelResponse.responseCode == 400) {
-      throw Exception((modelResponse as KyteErrorResponse).message ??
-          "Unknown error response from API");
+      throw HttpException(
+          (modelResponse as KyteErrorResponse).message ??
+              "Unknown error response from API",
+          responseCode: modelResponse.responseCode);
     }
     if (modelResponse.responseCode == 403) {
-      throw Exception((modelResponse as KyteErrorResponse).message ??
-          "Unauthorized Access");
+      throw HttpException(
+          (modelResponse as KyteErrorResponse).message ?? "Unauthorized Access",
+          responseCode: modelResponse.responseCode);
     }
     if (modelResponse.responseCode != 200) {
-      throw Exception((modelResponse as KyteErrorResponse).message ??
-          "Unknown error response from API. Error code ${modelResponse.responseCode}.");
+      throw HttpException(
+          (modelResponse as KyteErrorResponse).message ??
+              "Unknown error response from API. Error code ${modelResponse.responseCode}.",
+          responseCode: modelResponse.responseCode);
     }
 
     return response;

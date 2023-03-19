@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:kyte_dart/http_exception.dart';
 
 import 'kyte_error_response.dart';
 
@@ -67,7 +68,7 @@ class Api {
   Map<String, String> generateHeader(
       {Map<String, String>? customHeaders,
       String pageId = "1",
-      String pageSize = "0",
+      String pageSize = "50",
       String contentType = "application/json"}) {
     var timeStamp = formattedTimeStamp();
     var identityString = generateIdentity(formattedTimeStamp());
@@ -82,7 +83,7 @@ class Api {
     };
 
     if (appId.isNotEmpty) {
-      header.addEntries({"X-KYTE-SIGNATURE": appId}.entries);
+      header.addEntries({"X-KYTE-APPID": appId}.entries);
     }
 
     if (customHeaders != null) {
@@ -169,13 +170,18 @@ class Api {
     }
 
     try {
+      if (response.body.isEmpty) {
+        throw Exception("Response body is empty.");
+      }
+
       if (response.statusCode != 200) {
         return KyteErrorResponse.fromJson(json.decode(response.body));
       }
 
       return fromJosn(json.decode(response.body));
     } catch (e) {
-      throw Exception("Unable to parse response data. ${e.toString()}");
+      throw HttpException("Unable to parse response data. ${e.toString()}",
+          responseCode: response.statusCode);
     }
   }
 
