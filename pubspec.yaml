@@ -14,7 +14,8 @@ dependencies:
   intl: ^0.17.0
   http: ^0.13.5
   crypto: ^3.0.2
-  dotenv: ^4.1.0
+  flutter_dotenv: ^5.0.2
+  get_storage: ^2.1.1
 
 dev_dependencies:
   flutter_test:
