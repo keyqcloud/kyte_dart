@@ -14,6 +14,7 @@ class Kyte {
   String? accountNumber;
   String? publicKey;
   String? secretKey;
+  String? appId;
 
   String _sessionToken = "0";
   String _txToken = "0";
@@ -23,6 +24,7 @@ class Kyte {
   final String _accountNumber = const String.fromEnvironment('kyte_account');
   final String _publicKey = const String.fromEnvironment('kyte_publickey');
   final String _secretKey = const String.fromEnvironment('kyte_secretkey');
+  final String _appId = const String.fromEnvironment('kyte_appid');
 
   factory Kyte() {
     return _instance;
@@ -45,7 +47,8 @@ class Kyte {
         identifier ?? _identifier,
         accountNumber ?? _accountNumber,
         publicKey ?? _publicKey,
-        secretKey ?? _secretKey);
+        secretKey ?? _secretKey,
+        appId ?? _appId);
 
     api.sessionToken = _sessionToken;
     api.txToken = _txToken;

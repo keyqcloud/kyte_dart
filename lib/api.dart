@@ -18,12 +18,13 @@ class Api {
   final String accountNumber;
   final String publicKey;
   final String secretKey;
+  final String appId;
   String sessionToken = "0";
   String txToken = "0";
   var client = http.Client();
 
   Api(this.endpoint, this.identifier, this.accountNumber, this.publicKey,
-      this.secretKey);
+      this.secretKey, this.appId);
 
 // Map<String, String> headers = {"Content-type": "application/json"};
 
@@ -80,6 +81,10 @@ class Api {
       "X-KYTE-PAGE-IDX": pageId,
       "X-KYTE-PAGE-SIZE": pageSize,
     };
+
+    if (appId.isNotEmpty) {
+      header.addEntries({"X-KYTE-SIGNATURE": appId}.entries);
+    }
 
     if (customHeaders != null) {
       header.addEntries(customHeaders.entries);
