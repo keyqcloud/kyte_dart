@@ -127,16 +127,12 @@ class Api {
 
       // make put request
       case KyteRequestType.put:
-        if (field == null) {
-          throw Exception('Field cannot be null for PUT request');
-        }
-        if (value == null) {
-          throw Exception('Value cannot be null for PUT request');
-        }
         if (body == null) {
           throw Exception('Data body cannot be null for PUT request');
         }
-        response = await put(model, field, value, body,
+        response = await put(model, body,
+            field: field,
+            value: value,
             customHeaders: customHeaders,
             pageId: pageId,
             pageSize: pageSize,
@@ -243,8 +239,10 @@ class Api {
   /*
    * PUT Request
    */
-  Future<dynamic> put(String model, String field, String value, String body,
-      {Map<String, String>? customHeaders,
+  Future<dynamic> put(String model, String body,
+      {String? field,
+      String? value,
+      Map<String, String>? customHeaders,
       String pageId = "1",
       String pageSize = "0",
       String contentType = "application/json"}) async {
