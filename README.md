@@ -21,7 +21,16 @@ kyte_appid=MY_APPLICATION_ID_GOES_HERE
 
 ## Usage
 
-Once you have a `.env` with your API endpoint information, you can start making calls to your Kyte API endpoint. To initialize Kyte, simply call
+To get started, you will need to import the kyte_dart package.
+
+```dart
+import 'package:kyte_dart/kyte_dart.dart';
+import 'package:kyte_dart/api.dart';
+import 'package:kyte_dart/http_exception.dart';
+```
+
+Once you have a `.env` with your API endpoint information, and imported the necessary packages, you can start making calls to your Kyte API endpoint. To initialize Kyte, simply call
+
 ```
 var kyte = Kyte();
 ```
