@@ -2,6 +2,8 @@ name: kyte_dart
 description: Flutter package for integrating Kyte API.
 version: 0.0.1
 homepage: www.keyq.cloud
+repository: https://github.com/keyqcloud/kyte_dart
+issue_tracker: https://github.com/keyqcloud/kyte_dart/issues
 
 environment:
   sdk: '>=2.18.2 <3.0.0'
