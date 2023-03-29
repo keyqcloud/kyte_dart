@@ -30,36 +30,36 @@ class Kyte {
       String pageSize = "50",
       String contentType = "application/json"}) async {
     await dotenv.load(fileName: ".env");
-    final String kyte_endpoint = dotenv.env['kyte_endpoint'] ?? "";
-    final String kyte_identifier = dotenv.env['kyte_identifier'] ?? "";
-    final String kyte_account = dotenv.env['kyte_account'] ?? "";
-    final String kyte_publickey = dotenv.env['kyte_publickey'] ?? "";
-    final String kyte_secretkey = dotenv.env['kyte_secretkey'] ?? "";
-    final String kyte_appid = dotenv.env['kyte_appid'] ?? "";
+    final String kyteEndpoint = dotenv.env['kyte_endpoint'] ?? "";
+    final String kyteIdentifier = dotenv.env['kyte_identifier'] ?? "";
+    final String kyteAccount = dotenv.env['kyte_account'] ?? "";
+    final String kytePublickey = dotenv.env['kyte_publickey'] ?? "";
+    final String kyteSecretkey = dotenv.env['kyte_secretkey'] ?? "";
+    final String kyteAppid = dotenv.env['kyte_appid'] ?? "";
 
-    if (kyte_endpoint.isEmpty) {
+    if (kyteEndpoint.isEmpty) {
       throw Exception(
           "Kyte endpoint cannot be empyt. Please define kyte_endpoint in your .env file.");
     }
-    if (kyte_identifier.isEmpty) {
+    if (kyteIdentifier.isEmpty) {
       throw Exception(
           "Kyte identifier cannot be empyt. Please define kyte_identifier in your .env file.");
     }
-    if (kyte_account.isEmpty) {
+    if (kyteAccount.isEmpty) {
       throw Exception(
           "Kyte account number cannot be empyt. Please define kyte_account in your .env file.");
     }
-    if (kyte_publickey.isEmpty) {
+    if (kytePublickey.isEmpty) {
       throw Exception(
           "Kyte public key cannot be empyt. Please define kyte_publickey in your .env file.");
     }
-    if (kyte_secretkey.isEmpty) {
+    if (kyteSecretkey.isEmpty) {
       throw Exception(
           "Kyte secret key cannot be empyt. Please define kyte_secretkey in your .env file.");
     }
 
-    Api api = Api(kyte_endpoint, kyte_identifier, kyte_account, kyte_publickey,
-        kyte_secretkey, kyte_appid);
+    Api api = Api(kyteEndpoint, kyteIdentifier, kyteAccount, kytePublickey,
+        kyteSecretkey, kyteAppid);
 
     api.sessionToken = _sessionToken;
     api.txToken = _txToken;
@@ -76,7 +76,7 @@ class Kyte {
           pageSize: pageSize,
           contentType: contentType);
     } catch (e) {
-      throw e;
+      rethrow;
     }
 
     // retrieve session and tx token and internal update variables
