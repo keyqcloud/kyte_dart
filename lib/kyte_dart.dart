@@ -2,6 +2,11 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
+/// kyte_dart package.
+///
+/// kyte_dart is a Flutter package that enables seamless communication between
+/// your app and a Kyte API endpoint, whether deployed by Kyte Shipyard or
+/// custom deployment using KytePHP.
 library kyte_dart;
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';

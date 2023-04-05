@@ -1,3 +1,8 @@
+## 0.0.4
+
+* Fix missing library level documentation comments.
+* Remove conflicting library definition.
+
 ## 0.0.3
 
 * Add dartdoc documentation & comments.
