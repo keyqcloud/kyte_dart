@@ -1,3 +1,9 @@
+## 0.0.5
+
+* Resolve conflict with existing HttpException class
+* Add KyteHttpException to replace HttpException
+* Add deprecation annotation to HttpException to inform developers to use KyteHttpException instead
+
 ## 0.0.4
 
 * Fix missing library level documentation comments.
