@@ -1,7 +1,9 @@
 name: kyte_dart
-description: Flutter package for integrating Kyte API.
-version: 0.0.1
-homepage: www.keyq.cloud
+description: kyte_dart is a Flutter package that enables seamless communication between your app and a Kyte API endpoint, whether deployed by Kyte Shipyard or custom deployment using KytePHP.
+version: 0.0.4
+homepage: https://www.keyq.cloud
+repository: https://github.com/keyqcloud/kyte_dart
+issue_tracker: https://github.com/keyqcloud/kyte_dart/issues
 
 environment:
   sdk: '>=2.18.2 <3.0.0'
@@ -11,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  intl: ^0.17.0
+  intl: ^0.18.0
   http: ^0.13.5
   crypto: ^3.0.2
   flutter_dotenv: ^5.0.2
