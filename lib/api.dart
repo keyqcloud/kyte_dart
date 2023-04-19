@@ -8,7 +8,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:kyte_dart/http_exception.dart';
+import 'package:kyte_dart/kyte_http_exception.dart';
 
 import 'kyte_error_response.dart';
 
@@ -230,7 +230,7 @@ class Api {
       return fromJosn(json.decode(response.body));
     } catch (e) {
       /// If there was an error with parsing the data, throw exception
-      throw HttpException("Unable to parse response data. ${e.toString()}",
+      throw KyteHttpException("Unable to parse response data. ${e.toString()}",
           responseCode: response.statusCode);
     }
   }

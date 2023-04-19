@@ -11,7 +11,7 @@ library kyte_dart;
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:kyte_dart/http_exception.dart';
+import 'package:kyte_dart/kyte_http_exception.dart';
 import 'package:kyte_dart/model_response.dart';
 
 import 'api.dart';
@@ -124,20 +124,20 @@ class Kyte {
 
     if (modelResponse.responseCode == 400) {
       /// If the response code is 400, then request is unknown so throw exception
-      throw HttpException(
+      throw KyteHttpException(
           (modelResponse as KyteErrorResponse).message ??
               "Unknown error response from API",
           responseCode: modelResponse.responseCode);
     }
     if (modelResponse.responseCode == 403) {
       /// If the response code is 403, then request is unauthorized so throw exception
-      throw HttpException(
+      throw KyteHttpException(
           (modelResponse as KyteErrorResponse).message ?? "Unauthorized Access",
           responseCode: modelResponse.responseCode);
     }
     if (modelResponse.responseCode != 200) {
       /// If the response code is not 200, then unknown error, so throw exception
-      throw HttpException(
+      throw KyteHttpException(
           (modelResponse as KyteErrorResponse).message ??
               "Unknown error response from API. Error code ${modelResponse.responseCode}.",
           responseCode: modelResponse.responseCode);
