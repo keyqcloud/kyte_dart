@@ -2,8 +2,7 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-@Deprecated('Use [KyteHttpException]')
-class HttpException implements Exception {
+class KyteHttpException implements Exception {
   /// The exception message
   final String message;
 
@@ -11,7 +10,7 @@ class HttpException implements Exception {
   final int? responseCode;
 
   /// Constructor that takes an exception message and an optional response code
-  HttpException(this.message, {this.responseCode});
+  KyteHttpException(this.message, {this.responseCode});
 
   /// Override default toString method to return message.
   @override
