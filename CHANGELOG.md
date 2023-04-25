@@ -1,8 +1,9 @@
 ## 0.0.5
 
-* Resolve conflict with existing HttpException class
-* Add KyteHttpException to replace HttpException
-* Add deprecation annotation to HttpException to inform developers to use KyteHttpException instead
+* Resolve conflict with existing HttpException class.
+* Add KyteHttpException to replace HttpException.
+* Add deprecation annotation to HttpException to inform developers to use KyteHttpException instead.
+* Add an optional logout callback handler to custom handle 403 responses.
 
 ## 0.0.4
 
