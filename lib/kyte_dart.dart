@@ -51,7 +51,8 @@ class Kyte {
       Map<String, String>? customHeaders,
       String pageId = "1",
       String pageSize = "50",
-      String contentType = "application/json"}) async {
+      String contentType = "application/json",
+      Function? logoutCallback}) async {
     await dotenv.load(fileName: ".env");
     final String kyteEndpoint = dotenv.env['kyte_endpoint'] ?? "";
     final String kyteIdentifier = dotenv.env['kyte_identifier'] ?? "";
@@ -130,6 +131,10 @@ class Kyte {
           responseCode: modelResponse.responseCode);
     }
     if (modelResponse.responseCode == 403) {
+      if (logoutCallback != null) {
+        logoutCallback();
+      }
+
       /// If the response code is 403, then request is unauthorized so throw exception
       throw KyteHttpException(
           (modelResponse as KyteErrorResponse).message ?? "Unauthorized Access",
