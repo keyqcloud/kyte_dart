@@ -34,6 +34,13 @@ class Kyte {
 
   Kyte._internal();
 
+  /// Resets the internal token, especially important when logging out and invalidating a session
+  ///
+  resetToken() {
+    _sessionToken = "0";
+    _txToken = "0";
+  }
+
   /// Makes an HTTP request to the Kyte API backend and returns model data
   /// from JSON.
   ///

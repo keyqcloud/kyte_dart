@@ -1,3 +1,7 @@
+## 0.0.6
+
+* Add ability to reset tokens
+
 ## 0.0.5
 
 * Resolve conflict with existing HttpException class.
