@@ -1,3 +1,7 @@
+## 0.0.7
+
+* Add optional global logout callback to be called if 403 error is encountered.
+
 ## 0.0.6
 
 * Add ability to reset tokens

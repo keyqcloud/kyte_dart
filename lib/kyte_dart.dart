@@ -27,6 +27,9 @@ class Kyte {
   /// The transaction token, which defaults to "0" when there is no active session.
   String _txToken = GetStorage().read('kyteTxToken') ?? "0";
 
+  /// Optional logout callback to be called if a 403 error is encountered
+  Function? _globalLogoutCallback;
+
   /// Constructor returns itself
   factory Kyte() {
     return _instance;
@@ -39,6 +42,11 @@ class Kyte {
   resetToken() {
     _sessionToken = "0";
     _txToken = "0";
+  }
+
+  /// Sets a global callback for logging out after 403
+  setGlobalLogoutCallback(Function? callback) {
+    _globalLogoutCallback = callback;
   }
 
   /// Makes an HTTP request to the Kyte API backend and returns model data
@@ -140,6 +148,10 @@ class Kyte {
     if (modelResponse.responseCode == 403) {
       if (logoutCallback != null) {
         logoutCallback();
+      } else {
+        if (_globalLogoutCallback != null) {
+          _globalLogoutCallback!();
+        }
       }
 
       /// If the response code is 403, then request is unauthorized so throw exception
