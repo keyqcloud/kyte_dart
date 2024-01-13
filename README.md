@@ -1,5 +1,7 @@
 Flutter package for integrating with Kyte API.
 
+[![Dart](https://github.com/keyqcloud/kyte_dart/actions/workflows/dart.yml/badge.svg)](https://github.com/keyqcloud/kyte_dart/actions/workflows/dart.yml)
+
 ## Features
 
 - handles API signature generation
