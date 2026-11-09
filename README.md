@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> **Maintenance mode.** Kyte is in maintenance mode. Security fixes will continue through November 2027; no new features are planned. Existing installations remain supported during this period.
+
 Flutter package for integrating with Kyte API.
 
 [![Dart](https://github.com/keyqcloud/kyte_dart/actions/workflows/dart.yml/badge.svg)](https://github.com/keyqcloud/kyte_dart/actions/workflows/dart.yml)
